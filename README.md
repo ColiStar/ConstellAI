@@ -34,7 +34,7 @@ This document showcases the raw prompts I designed to command the AI, enforce ph
 ---
 
 ## 🚀 Running ConstellAI Locally
-If you have the structured local Obsidian Vault, you can launch the spatial matrix with a single script:
+This repository includes a packaged `sample_vault/` (containing real SOTA AI papers, concepts, and insights from my UCSB 594BB research). That means you can launch it instantly out of the box!
 
 ```bash
 # In the ConstellAI directory

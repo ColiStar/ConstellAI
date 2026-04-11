@@ -10,14 +10,16 @@ from __future__ import annotations
 
 import functools
 import pathlib
+import os
 
 from fastapi import APIRouter, HTTPException
 
 from backend.models import GraphResponse, PaperDetail, ConceptDetail
 from backend.parser import build_graph, discover_files, parse_paper, parse_concept
 
-# The real vault root — two levels above the ConstellAI directory
-_VAULT_ROOT = pathlib.Path(__file__).parents[2]
+# Read vault path from environment, or fallback to the packaged sample_vault
+_DEFAULT_VAULT = pathlib.Path(__file__).parents[1] / "sample_vault"
+_VAULT_ROOT = pathlib.Path(os.environ.get("VAULT_PATH", _DEFAULT_VAULT))
 
 router = APIRouter(prefix="/api")
 
