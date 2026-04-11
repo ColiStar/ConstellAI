@@ -28,3 +28,6 @@ frontend/tsconfig.tsbuildinfo
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local Logs
+YC_Raw_Session_Transcript.md
