@@ -2,8 +2,8 @@
 
 **Status:** Production-ready MVP  
 **Last updated:** 2026-04-10  
-**Working dir:** `/Users/colicoli/Desktop/obisidian/594BBtest/ConstellAI`  
-**Data vault (read-only):** `/Users/colicoli/Desktop/obisidian/594BBtest`
+**Working dir:** `./` (ConstellAI Root)  
+**Data vault (read-only):** `./sample_vault`
 
 ---
 
