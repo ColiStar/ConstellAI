@@ -34,7 +34,7 @@ This document showcases the raw prompts I designed to command the AI, enforce ph
 ---
 
 ## 🚀 Running ConstellAI Locally
-This repository includes a packaged `sample_vault/` (containing real SOTA AI papers, concepts, and insights from my UCSB 594BB research). That means you can launch it instantly out of the box!
+This repository includes a packaged `sample_vault/` (containing my study notes, concept breakdowns, and insights synthesized from reading real SOTA AI papers during the UCSB 594BB course). That means you can launch it instantly out of the box!
 
 ```bash
 # In the ConstellAI directory
