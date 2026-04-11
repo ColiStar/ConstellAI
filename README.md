@@ -1,56 +1,44 @@
-# ✨ ConstellAI: Designing Relativity Over Absolutes
+# ✨ ConstellAI: Visualizing Relativity Over Absolutes
 
-**ConstellAI** is an interaction design experiment and 2.5D knowledge graph visualizer built to map out high-dimensional concepts in AI alignment research. 
+## 🌌 Motivation
+This project was born out of my experience in the **UCSB 594BB** course. Throughout the semester, I immersed myself in numerous State-of-the-Art (SOTA) AI research papers spanning diverse sub-fields. 
 
-Traditionally, knowledge management tools present information as flat lists or chaotic, physics-driven node-link diagrams. ConstellAI proposes a different paradigm: treating a corpus of research papers as **fixed stars in a deep-space starfield**, and shifting the interactive focus entirely onto the "Lenses" we use to view them.
+As I studied, I began to sense deep, underlying connections between these papers. Even when papers originated from entirely different domains, they often shared similar high-level structural thoughts or philosophical approaches. However, traditional knowledge management tools—such as flat lists, rigid folders, or chaotic force-directed physics graphs—entirely failed to capture these nuanced, cross-domain relationships. 
 
-This application is the programmatic manifestation of an undergraduate thesis focused on **AI Interpretability and Spatial Interaction Design**.
+I wanted a visual, spatial way to represent and organize these hidden connections. I conceptualized a system where individual papers act as **fixed stars**, and the underlying connections act as **Lenses (Insights)** that reveal specific constellations when viewed from the right perspective.
 
----
+## 🛠️ How I Built This (The Contribution)
 
-## 🔭 The Philosophy: "Relativity Over Absolutes"
+My core contribution to this project is not the boilerplate HTML or Python code itself, but the **Knowledge Architecture and the Prompt Engineering (Vibecoding)** that brought it to life. I acted as the Domain Expert and Product Director, utilizing AI as my engineering team.
 
-The core philosophy driving this interface is that individual data points (stars/papers) are absolute and static, but *meaning* is geometric and relative. 
+Here is exactly how I built ConstellAI:
+1. **Knowledge Extraction:** First, I reviewed the SOTA papers and extracted multiple high-level "Insights". These insights formed the core ontology of the constellations.
+2. **Structuring the Vault:** I constructed a rigorous, highly-structured local knowledge base (a Markdown Obsidian Vault), systematically dividing data into MOCs (Maps of Content), Insights, Concepts, and Papers.
+3. **Prompt Engineering & System Design:** I taught an autonomous AI agent exactly how to interpret my knowledge base. I provided explicit directives on how the backend (FastAPI) should parse my vault, and established strict UX/UI "Vibe" mandates (like Liquid Glassmorphism and exact Bezier-curve rendering logic) to ensure the 2.5D interface accurately reflected my philosophical concept.
 
-When a user interacts with the system, they don't search for papers—they switch **Insight Lenses**. Switching a lens reorganizes the connections between scattered stars to reveal hidden structures and exact letter-shaped constellations (such as **R, V, D, S**).
-
-### Core Experiential Features
-- **Deterministic Geometric Constellations:** Shifting a lens explicitly draws glowing constellation lines that form strict, recognizable typography across the canvas, proving that perspective dictates pattern.
-- **Liquid Glassmorphism Panels:** A custom UI layer using heavy blur, saturation filters, and low-opacity dark tones, allowing the glowing stars beneath to bleed organically through the interface.
-- **Nested Contextual Threads:** As users explore high-level papers, secondary glass panels slide out to define mathematical concepts (Level 2 definitions), connected by glowing spatial threads.
-
----
-
-## 🎥 Visual Demo
-*(👉 **Recommendation:** Replace this text with a short 10-second GIF or screen recording showing the slider switching lenses and drawing the letters R, V, D, S, plus sliding out a glass panel.)*
-
-![ConstellAI Interface Overview](./docs/placeholder.png)
+The true value of this project lies entirely in the **Prompt Framework** and problem-solving methodology I used to turn theoretical knowledge structures into a fully working full-stack matrix.
 
 ---
 
-## 🏛 Design & Concept Architectures
-If you are evaluating the theoretical and design constraints of this project, please refer to:
-* 📖 [**CASE_STUDY_SESSION.md**](./CASE_STUDY_SESSION.md) - A conceptual deep-dive into why physics simulations were rejected in favor of fixed-coordinate geometry to enforce typographic constellations.
-* 🏛 [**ARCHITECTURE.md**](./ARCHITECTURE.md) - The vault structure mapping the relationship between absolute stars (Papers) and their telescope lenses (Insights).
+## 🎬 Visual Demo
+https://github.com/user-attachments/assets/7fce0249-b6da-432e-be57-d0233959b99c
 
 ---
 
-## 🚀 Running the Space Locally
-ConstellAI parses its spatial graph from a strict, local Read-Only Obsidian Markdown Vault. 
+## 🧠 The Vibecoding Journey
+If you want to see exactly how I directed an AI to build a full-stack, visually complex application from a set of Markdown files, please read my Prompt Engineering Log:
 
-**Wait for Backend API parsing (Window 1):**
+📖 [**PROMPT_ENGINEERING_JOURNEY.md**](./PROMPT_ENGINEERING_JOURNEY.md) 
+This document showcases the raw prompts I designed to command the AI, enforce physical geometry on the canvas, correct its UI mistakes, and architect a robust semantic clustering ML backend.
+
+---
+
+## 🚀 Running ConstellAI Locally
+If you have the structured local Obsidian Vault, you can launch the spatial matrix with a single script:
+
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+# In the ConstellAI directory
+bash start.sh
 ```
 
-**Launch the Canvas Interface (Window 2):**
-```bash
-cd frontend
-npm install
-npm run dev
-```
-Visit `http://localhost:3000` to enter the spatial matrix.
+*(This automatically boots the FastAPI backend parser on `:8000` and the Next.js visualizer on `:3000`)*
