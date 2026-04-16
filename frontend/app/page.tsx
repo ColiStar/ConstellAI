@@ -91,9 +91,9 @@ export default function ConstellAIPage() {
 
   if (error) {
     return (
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "#ef4444", fontFamily: "monospace", fontSize: "14px", padding: "32px", textAlign: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100vh", color: "#ef4444", fontFamily: "monospace", fontSize: "15px", padding: "32px", textAlign: "center" }}>
         Backend unreachable: {error}<br />
-        <span style={{ opacity: 0.6, fontSize: "12px", marginTop: "8px", display: "block" }}>Start the FastAPI server: uvicorn backend.main:app --reload --port 8000</span>
+        <span style={{ opacity: 0.6, fontSize: "13px", marginTop: "8px", display: "block" }}>Start the FastAPI server: uvicorn backend.main:app --reload --port 8000</span>
       </div>
     );
   }
@@ -114,7 +114,7 @@ export default function ConstellAIPage() {
       {/* ── Loading overlay ── */}
       {loading && (
         <div style={{ position: "fixed", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px", zIndex: 100, pointerEvents: "none" }}>
-          <span style={{ fontSize: "12px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(226,232,240,0.35)" }}>
+          <span style={{ fontSize: "14px", letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(248,250,252,0.5)" }}>
             Calibrating telescope
           </span>
           <div style={{ display: "flex", gap: "8px" }}>
@@ -128,23 +128,16 @@ export default function ConstellAIPage() {
       {/* ── Wordmark (top-left, always above InsightPanel) ── */}
       {!loading && (
         <div style={{ position: "fixed", top: "28px", left: "32px", zIndex: 55, pointerEvents: "none" }}>
-          <div style={{ fontSize: "13px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(226,232,240,0.85)" }}>
+          <div style={{ fontSize: "15px", fontWeight: 700, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(248,250,252,0.9)" }}>
             ConstellAI
           </div>
-          <div style={{ fontSize: "9.5px", letterSpacing: "0.07em", color: "rgba(148,163,184,0.45)", marginTop: "2px" }}>
+          <div style={{ fontSize: "11px", letterSpacing: "0.07em", color: "rgba(203,213,225,0.6)", marginTop: "2px" }}>
             Constellation Spatial Matrix
           </div>
         </div>
       )}
 
-      {/* ── Center hint ── */}
-      {!loading && !activeInsightId && (
-        <div style={{ position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)", textAlign: "center", pointerEvents: "none", zIndex: 20, animation: "fade-in 1.2s ease forwards" }}>
-          <p style={{ fontSize: "11px", letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(148,163,184,0.3)" }}>
-            Select a lens below to reveal a constellation
-          </p>
-        </div>
-      )}
+      {/* ── Center hint (REMOVED) ── */}
 
       {/* ── Insight Slider (bottom-center) ── */}
       {!loading && graph && (

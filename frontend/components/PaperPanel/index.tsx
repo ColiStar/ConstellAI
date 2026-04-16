@@ -9,6 +9,9 @@
  */
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import DraggablePanel from "@/components/DraggablePanel";
 import { usePaper } from "@/hooks/usePaper";
 import type { InsightData } from "@/lib/types";
@@ -56,7 +59,7 @@ export default function PaperPanel({
       >
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
           <span style={{ fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-label)", paddingTop: "2px" }}>
-            Research Paper · drag to move
+            Research Paper
           </span>
           <button
             onClick={(e) => { e.stopPropagation(); onClose(); }}
@@ -112,9 +115,6 @@ export default function PaperPanel({
 
           {paper.concepts.length > 0 && (
             <div>
-              <p style={{ fontSize: "10px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-label)", marginBottom: "10px" }}>
-                Core Concepts — click to explore
-              </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                 {paper.concepts.map((concept) => (
                   <button
@@ -152,7 +152,12 @@ export default function PaperPanel({
           <div style={{ height: "1px", background: `linear-gradient(to right, transparent, ${insightColor}40, transparent)` }} />
 
           <div className="md-body">
-            <ReactMarkdown>{stripWikilinks(paper.summary_md)}</ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+            >
+              {stripWikilinks(paper.summary_md)}
+            </ReactMarkdown>
           </div>
         </div>
       )}

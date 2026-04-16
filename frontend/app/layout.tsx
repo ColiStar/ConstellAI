@@ -29,6 +29,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable}`}
     >
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.21/dist/katex.min.css"
+          integrity="sha384-zh0CI7EZf9yIDtoIn8zOxqZIWoANf77ksmG6M3B0bS3m1h4T1yK/U4Z07XhByf00"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body>
         <SWRProvider>{children}</SWRProvider>
       </body>

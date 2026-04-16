@@ -104,11 +104,11 @@ export function drawNodes(
     }
 
     // ── Node label (shadow simulation: draw twice) ──────────────
-    const labelAlpha = isHovered || isSelected ? 0.96 : isActive ? 0.80 : 0.48;
-    const labelSize  = isHovered || isSelected ? 13 : 12;
+    const labelAlpha = isHovered || isSelected ? 0.96 : isActive ? 0.85 : 0.60;
+    const labelSize  = isHovered || isSelected ? 16 : 14;
     const rawTitle   = node.title.replace(/^[^\w]+\s*/, "");
     const label      = rawTitle.length > 22 ? rawTitle.slice(0, 20) + "…" : rawTitle;
-    const labelY     = cy + coreR + 18;
+    const labelY     = cy + coreR + 22;
     const fontWeight = isHovered || isSelected ? 600 : 400;
 
     ctx.font = `${fontWeight} ${labelSize}px ui-sans-serif, system-ui, sans-serif`;
@@ -119,7 +119,7 @@ export function drawNodes(
     ctx.fillText(label, cx + 1, labelY + 1);
 
     // Main pass
-    ctx.fillStyle = `rgba(226,232,240,${labelAlpha})`;
+    ctx.fillStyle = `rgba(248,250,252,${labelAlpha})`;
     ctx.fillText(label, cx, labelY);
 
     ctx.textAlign = "left";

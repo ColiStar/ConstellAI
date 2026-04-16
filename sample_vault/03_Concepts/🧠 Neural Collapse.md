@@ -4,7 +4,7 @@ status: 🌳 Mature
 ---
 # 🧠 Neural Collapse
 **📌 Related Papers:** [[📄 NCI]], [[📄 fDBD]], [[📄 Safety Alignment Just a Few Tokens Deep]]
-**🔗 Related Insights:** [[✨ Superficial vs Geometric Alignment]]
+**🔗 Related Insights:** [[✨ Superficial vs Intrinsic Latent Structure]]
 
 ## What is Neural Collapse (NC)?
 Neural Collapse is a beautiful geometric phenomenon observed in perfectly trained deep neural networks at the terminal phase of training (specifically, post-interpolation). 
@@ -18,4 +18,4 @@ In the final feature layer (just before the classifier), the representations of 
 4. **Simplification to Nearest Class Center (NCC):** Network decision boundaries mathematically simplify to being purely based on the closest Euclidean distance to a class center.
 
 ## Why it matters
-Because a model exhibits such rigid, perfect geometric order for data it "knows" (In-Distribution), any deviation from this strict Neural Collapse geometry is a massive mathematical red flag. This allows us to move beyond superficial Softmax outputs and look deeply at [[✨ Superficial vs Geometric Alignment|geometric structures]] to detect OOD anomalies or adversarial safety attacks.
+Because a model exhibits such rigid, perfect geometric order for data it "knows" (In-Distribution), any deviation from this strict Neural Collapse geometry is a massive mathematical red flag. This allows us to move beyond superficial Softmax outputs and look deeply at [[✨ Superficial vs Intrinsic Latent Structure|geometric structures]] to detect OOD anomalies or adversarial safety attacks.

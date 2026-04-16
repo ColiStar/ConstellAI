@@ -22,9 +22,9 @@ interface InsightSliderProps {
   onSelect: (id: string | null) => void;
 }
 
-const TRACK_W    = 540;  // px — total track width
+const TRACK_W    = 720;  // px — total track width (increased from 540)
 const STOP_GAP   = TRACK_W / 3;    // distance between each of 4 stops
-const THUMB_SIZE = 16;  // px
+const THUMB_SIZE = 18;  // px (slightly larger)
 
 export default function InsightSlider({ insights, activeId, onSelect }: InsightSliderProps) {
   const activeIndex = insights.findIndex((i) => i.id === activeId);
@@ -59,9 +59,9 @@ export default function InsightSlider({ insights, activeId, onSelect }: InsightS
       }}>
         {activeInsight && (
           <p style={{
-            fontSize: "11px",
+            fontSize: "14px",
             lineHeight: 1.55,
-            color: "rgba(226,232,240,0.5)",
+            color: "rgba(248,250,252,0.65)",
             fontStyle: "italic",
             textAlign: "center",
             margin: 0,
@@ -76,29 +76,31 @@ export default function InsightSlider({ insights, activeId, onSelect }: InsightS
       <div style={{ width: `${TRACK_W + 80}px`, padding: "0 40px", boxSizing: "border-box" }}>
 
         {/* Letter labels (above track) */}
-        <div style={{ display: "flex", width: `${TRACK_W}px`, marginLeft: "0px", marginBottom: "8px" }}>
+        <div style={{ position: "relative", width: `${TRACK_W}px`, height: "30px", marginBottom: "4px" }}>
           {insights.map((ins, i) => {
             const isActive = ins.id === activeId;
             return (
               <div
                 key={ins.id}
                 style={{
-                  width: `${STOP_GAP}px`,
-                  flexShrink: 0,
+                  position: "absolute",
+                  left: `${i * STOP_GAP}px`,
+                  top: "50%",
+                  transform: "translate(-50%, -50%)",
                   display: "flex",
-                  justifyContent: i === insights.length - 1 ? "flex-end" : "center",
-                  paddingRight: i === insights.length - 1 ? "0px" : "0px",
+                  justifyContent: "center",
                 }}
               >
                 <span style={{
                   fontFamily: "var(--font-geist-mono), monospace",
-                  fontSize: "20px",
+                  fontSize: "24px",
                   fontWeight: 800,
                   lineHeight: 1,
-                  color: isActive ? ins.color : "rgba(255,255,255,0.18)",
-                  textShadow: isActive ? `0 0 16px ${ins.color}` : "none",
+                  color: isActive ? ins.color : "rgba(255,255,255,0.22)",
+                  textShadow: isActive ? `0 0 20px ${ins.color}` : "none",
                   transition: "all 0.35s ease",
                   cursor: "pointer",
+                  whiteSpace: "nowrap",
                 }}
                   onClick={() => onSelect(ins.id === activeId ? null : ins.id)}
                 >
@@ -195,35 +197,32 @@ export default function InsightSlider({ insights, activeId, onSelect }: InsightS
         </div>
 
         {/* Short names (below track) */}
-        <div style={{ display: "flex", width: `${TRACK_W}px`, marginTop: "8px" }}>
+        <div style={{ position: "relative", width: `${TRACK_W}px`, height: "20px", marginTop: "12px" }}>
           {insights.map((ins, i) => {
             const isActive = ins.id === activeId;
             return (
               <div
                 key={ins.id}
                 style={{
-                  width: `${STOP_GAP}px`,
-                  flexShrink: 0,
-                  display: "flex",
-                  justifyContent: i === insights.length - 1 ? "flex-end" : "center",
+                  position: "absolute",
+                  left: `${i * STOP_GAP}px`,
+                  top: "0",
+                  transform: "translateX(-50%)",
+                  textAlign: "center",
                 }}
               >
                 <span
                   onClick={() => onSelect(ins.id === activeId ? null : ins.id)}
                   style={{
-                    fontSize: "9px",
+                    fontSize: "12px",
                     fontWeight: 500,
                     letterSpacing: "0.07em",
                     textTransform: "uppercase",
-                    color: isActive ? ins.color_secondary : "rgba(255,255,255,0.18)",
+                    color: isActive ? ins.color_secondary : "rgba(255,255,255,0.25)",
                     transition: "color 0.3s ease",
                     whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxWidth: `${STOP_GAP - 4}px`,
                     cursor: "pointer",
                     display: "block",
-                    textAlign: i === insights.length - 1 ? "right" : "center",
                   }}
                 >
                   {shortName(ins.name)}

@@ -1,20 +1,6 @@
-/**
- * ConstellationEdges — renders glowing cubic-bezier constellation lines.
- *
- * Each edge is drawn as a cubic bezier (two control points), which gives
- * enough freedom to trace letter-shaped strokes between any two node positions.
- *
- * Rendering passes per edge:
- *   1. Wide blur pass  — thick, low-opacity glow
- *   2. Mid glow pass   — medium width, higher opacity, colored secondary
- *   3. Tight core line — 1 px, near-full opacity, primary color
- *
- * The `progress` value [0→1] drives per-edge sequential draw-in animation.
- * Each edge's sub-progress is computed from the global progress stagger.
- */
-
 import type { NodeData, InsightData } from "@/lib/types";
-import { getConstellation } from "@/lib/constellation";
+// getConstellation is no longer needed as we use dynamic data from the backend
+// import { getConstellation } from "@/lib/constellation";
 
 function scaleX(lx: number, w: number): number { return (lx / 1400) * w; }
 function scaleY(ly: number, h: number): number { return (ly / 800)  * h; }
@@ -140,12 +126,13 @@ export function drawConstellationEdges(
   h: number,
   progress: number,
 ): void {
-  const constellation = getConstellation(insight.id);
-  if (!constellation) return;
+  // Use dynamic edges from back-end InsightData instead of hardcoded constellations
+  const dynamicEdges = insight.edges;
+  if (!dynamicEdges || dynamicEdges.length === 0) return;
 
-  const edgeCount = constellation.edges.length;
+  const edgeCount = dynamicEdges.length;
 
-  constellation.edges.forEach((edge, i) => {
+  dynamicEdges.forEach((edge, i) => {
     // Stagger: each edge starts after the previous one reaches ~70%
     const staggerStart = (i / edgeCount) * 0.7;
     const staggerEnd   = staggerStart + (1 / edgeCount) * 1.3;
@@ -157,11 +144,31 @@ export function drawConstellationEdges(
     const tgt = getNodePos(nodes, edge.target, w, h);
     if (!src || !tgt) return;
 
+    // ── Automatic Curve Generation ──────────────────────────────────
+    // Instead of fixed control points, we generate an arc based on the vector.
+    // Logic: calculate midpoint and shift it perpendicular to the path.
+    const dx = tgt.x - src.x;
+    const dy = tgt.y - src.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    
+    // Perpendicular vector for arc offset (normalized)
+    const nx = -dy / dist;
+    const ny =  dx / dist;
+    
+    // Offset amount scaled by distance to keep it aesthetic
+    const offset = Math.min(dist * 0.25, 40);
+    
+    // Control points for a graceful symmetric arc
+    const cp1x = src.x + (dx * 0.33) + nx * offset;
+    const cp1y = src.y + (dy * 0.33) + ny * offset;
+    const cp2x = src.x + (dx * 0.66) + nx * offset;
+    const cp2y = src.y + (dy * 0.66) + ny * offset;
+
     drawGlowingCubic(
       ctx,
       src.x, src.y,
-      scaleX(edge.cp1.x, w), scaleY(edge.cp1.y, h),
-      scaleX(edge.cp2.x, w), scaleY(edge.cp2.y, h),
+      cp1x, cp1y,
+      cp2x, cp2y,
       tgt.x, tgt.y,
       insight.color,
       insight.color_secondary,

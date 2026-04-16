@@ -1,25 +1,49 @@
 ---
-tags: [Paper, OOD, Defense]
+domain: Image Classification
+tags: [OOD Detection]
 status: 🧠 Processed
 ---
-# 📄 fDBD (Feature Distance to Decision Boundary)
+> [!info] **Full Title:** *Fast Decision Boundary based Out-of-Distribution Detector* (ICML 2024)
+
+## Core Summary
+- **Goal:** Build an extremely efficient, **Auxiliary Model-Free** Out-of-Distribution (OOD) detector.
+- **The Intuition (Rooms & Walls):** Normal (ID) samples sit comfortably in the center of their class "rooms." Anomalies (OOD) are confusing to the model — they get stuck at the "walls" (Decision Boundaries) between classes.
+- **Key Advantage:** Uses a closed-form algebraic estimation, making it as fast as basic confidence scores but significantly more accurate.
+
+## Core Mechanisms
+- **1. Distance to Decision Boundary ($d_{DB}$):** Instead of measuring distance from the center, fDBD calculates the shortest distance from feature vector $f(x)$ to the decision hyperplane separating predicted class $\hat{c}$ from any other class $j$:
+$$d_{\hat{c},j}(x) = \frac{(w_{\hat{c}} - w_j)^T f(x) + (b_{\hat{c}} - b_j)}{||w_{\hat{c}} - w_j||_2}$$
+- **2. Deviation Regularization (The Core Magic):** Absolute distance is misleading — OOD features can have inflated magnitudes. fDBD divides by the sample's deviation from the training mean $\mu$:
+$$Dev(x) = ||f(x) - \mu||_2$$
+- **3. The Final fDBD Score:**
+$$S_{fDBD}(x) = \frac{d_{DB}(x)}{Dev(x)}$$
+*In plain English: "Distance to the wall ÷ its own signal volume." A small score means it is hugging the wall → likely an anomaly.*
+
+## Results
+- **Crushing Complex Baselines:** Achieves state-of-the-art AUROC and FPR95 (e.g., 44.60 FPR95), significantly outperforming heavy baselines like ViM and Mahalanobis Distance (MDS).
+- **Zero Latency Overhead:** Relies on $O(|C| \cdot P)$ closed-form estimations, running essentially as fast as the baseline MSP (Maximum Softmax Probability).
+
+> [!note] 📊 Twin Swords of Latent Geometry: fDBD vs. NCI
+> 
+> *💡 Both papers solve the Curse of Dimensionality by abandoning absolute measurements. fDBD looks at the "voids" between classes, while NCI looks at the "pillars" of the classes.*
+> 
+> | Feature | **fDBD** (The Voids / Walls) | **NCI** (The Pillars / Star) |
+> | :--- | :--- | :--- |
+> | **Geometric Focus** | **Decision Boundaries** (Hyperplanes separating classes). | **Class Centroids** (Weight vectors of the ETF structure). |
+> | **Mathematical Core** | $d_{DB}(x) / Dev(x)$ (Ratio of distances). | $w_c^T f(x) / \|w_c\|_2$ (Vector projection). |
+> | **🔗 Relativity Insight** | Relies on the **Relative Ratio** of boundary distance to deviation. | Relies on the **Relative Angle** (projection) between features and weights. |
+> | **🔗 Geometric Insight** | Exploits **Hyperplanes** where models are most uncertain. | Exploits the symmetric **Neural Collapse** geometry forged during training. |
+> | **Computational Speed** | Extremely Fast $O(\|C\| \cdot P)$, closed-form. | Extremely Fast $O(\|C\| \cdot P)$, matrix multiplication. |
+
+## Connection to Insights
+- **🔗 Leveraging [[✨ Relativity Over Absolutes]]:** fDBD proves that absolute distance in high-dimensional space is deceptive. By utilizing the $d_{DB}/Dev$ ratio, it evaluates **Relative Proportion** rather than absolute coordinates, perfectly neutralizing the signal inflation of OOD samples.
+- **🔗 Proving [[✨ Superficial vs Intrinsic Latent Structure]]:** Instead of trusting the superficial Softmax probabilities, fDBD directly calculates distances to the physical **Decision Hyperplanes** in latent space. True safety lies in mapping the geometric boundaries, not reading the final probability score.
 
 **📌 Related Insights:**
 - [[✨ Relativity Over Absolutes]]
-- [[✨ Superficial vs Geometric Alignment]]
-**🗣️ Relevant Presentations:**
-- [[🗣️ Report - Mapping the Unknown (OOD and Calibration)]]
-**🔑 Key Concepts:** [[🧠 Neural Collapse]]
+- [[✨ Superficial vs Intrinsic Latent Structure]]
 
-## Core Summary
-fDBD is an Out-of-Distribution (OOD) detection algorithm that completely bypasses the final Softmax layer (which is famously known to be overconfident). Instead, it measures how a sample's features physically align within the strict geometric landscape created by [[🧠 Neural Collapse]].
+**📄 Source:** [Original PDF](file:///Users/colicoli/Desktop/obisidian/594BBtest/pdf/Fast%20Decision%20Boundary.pdf)
 
-## Core Mechanisms
-1. **The Problem with Absolute Distance:** Older OOD detection methods tried to measure how far a feature representation was to the nearest decision boundary. However, features with naturally larger mathematical norms (magnitudes) would misleadingly appear further from the boundary just because they are scaled larger, causing false positives.
-2. **The fDBD Ratio:** To normalize this, fDBD uses a relative geometric property:
-   $$ fDBD~Score = \frac{Distance~to~Decision~Boundary}{Distance~to~Class~Center} $$
-3. By dividing the boundary distance by the center distance, the problematic magnitude of the vector cancels out. The metric is transformed into a pure [[✨ Relativity Over Absolutes|relative ratio]]. 
-
-## Connection to Insights
-- If a sample is genuine (In-Distribution), it should be very close to the center and far from the boundary, resulting in a very high score. If it is an OOD sample, it sits awkwardly in the latent space, resulting in a low score. 
-- This paper perfectly proves that relying on the **relativity** of spatial geometry to measure anomalies is far superior and more robust than relying on absolute distance thresholds.
+**🔑 Key Concepts:**
+- [[🧠 Neural Collapse]]

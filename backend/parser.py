@@ -68,55 +68,31 @@ _NODE_POSITIONS: dict[str, Position] = {
     "safety-alignment-just-a-few-tokens-deep":  Position(x=1200, y=310),
 }
 
-# Insight slug → letter, colors, and ordered edge list.
-# Edges define which paper pairs to connect; their ORDER implies
-# the stroke direction that traces the target letter.
+# Insight slug → letter, colors
 _INSIGHT_META: dict[str, dict[str, Any]] = {
     "relativity-over-absolutes": {
         "letter": "R",
         "color": "#7C3AED",
         "color_secondary": "#A78BFA",
-        # R: NCI→DeepSeek (top bar) + NCI→fDBD (spine/leg sweep) + DeepSeek→fDBD (leg)
-        "edges": [
-            ("nci", "deepseek-r1"),
-            ("nci", "fdbd"),
-            ("deepseek-r1", "fdbd"),
-        ],
+        "core_idea": "Context defines meaning; absolute values are secondary to relative differences.",
     },
     "the-variance-of-trajectories": {
         "letter": "V",
         "color": "#0EA5E9",
         "color_secondary": "#38BDF8",
-        # V: DeepSeek→PostAlign (left arm) + Incoherence→PostAlign (right arm)
-        "edges": [
-            ("deepseek-r1", "postalign"),
-            ("incoherence-hot-mess", "postalign"),
-        ],
+        "core_idea": "The path to an answer reveals more than the answer itself.",
     },
     "disentanglement-and-anchoring": {
         "letter": "D",
         "color": "#10B981",
         "color_secondary": "#34D399",
-        # D: EFA→PostAlign (top) + PostAlign→CroPA (right bump) +
-        #    CroPA→InterpretDiffusion (bottom) + InterpretDiffusion→EFA (spine)
-        "edges": [
-            ("efa", "postalign"),
-            ("postalign", "cropa"),
-            ("cropa", "interpret-diffusion"),
-            ("interpret-diffusion", "efa"),
-        ],
+        "core_idea": "Strict separation of concerns allows for surgical manipulation without collateral damage.",
     },
-    "superficial-vs-geometric-alignment": {
+    "superficial-vs-intrinsic-latent-structure": {
         "letter": "S",
         "color": "#F59E0B",
         "color_secondary": "#FCD34D",
-        # S: Safety→fDBD (top arc) + fDBD→DeepSeek (waist crossing) +
-        #    DeepSeek→NCI (bottom arc)
-        "edges": [
-            ("safety-alignment-just-a-few-tokens-deep", "fdbd"),
-            ("fdbd", "deepseek-r1"),
-            ("deepseek-r1", "nci"),
-        ],
+        "core_idea": "True alignment is structural, not just linguistic.",
     },
 }
 
@@ -251,16 +227,12 @@ def parse_insight(path: pathlib.Path) -> InsightData:
     title = path.stem.strip()
     insight_id = slugify(re.sub(r"^[^\w]+", "", title).strip())
 
+    # Keep original body contents without extraction/stripping
     raw_body = _extract_body(post)
-    full_text = raw_body
-
-    # Extract core idea from the first blockquote (> [!quote] Core Idea …)
-    core_idea_match = re.search(
-        r">\s*\[!quote\]\s*Core Idea\s*\n>\s*(.+)", full_text
-    )
-    core_idea = core_idea_match.group(1).strip() if core_idea_match else ""
+    core_idea = "" # Hidden to give space back to the main body
 
     # Paper ids mentioned in insight body
+    full_text = raw_body
     paper_names = _wikilinks(full_text, _PAPER_LINK_RE)
     paper_ids: list[str] = []
     seen: set[str] = set()
@@ -274,12 +246,9 @@ def parse_insight(path: pathlib.Path) -> InsightData:
     letter = meta.get("letter", "R")
     color = meta.get("color", "#FFFFFF")
     color_secondary = meta.get("color_secondary", "#FFFFFF")
-    raw_edges: list[tuple[str, str]] = meta.get("edges", [])
-
-    edges = [
-        EdgeData(source=s, target=t, insight_id=insight_id)
-        for s, t in raw_edges
-    ]
+    
+    # (Dynamic edges will be added during graph build)
+    edges: list[EdgeData] = []
 
     return InsightData(
         id=insight_id,
@@ -364,19 +333,27 @@ def build_graph(vault_root: pathlib.Path) -> GraphResponse:
         "relativity-over-absolutes",
         "the-variance-of-trajectories",
         "disentanglement-and-anchoring",
-        "superficial-vs-geometric-alignment",
+        "superficial-vs-intrinsic-latent-structure",
     ]
     insight_list.sort(
         key=lambda i: _slider_order.index(i.id) if i.id in _slider_order else 99
     )
 
-    # Build NodeData for each paper
+    # Build NodeData for each paper and collect insight memberships
     nodes: list[NodeData] = []
+    insight_to_papers: dict[str, list[str]] = {ins.id: [] for ins in insight_list}
+
     for paper_id, pd in paper_details.items():
         pos = _NODE_POSITIONS.get(paper_id)
         if pos is None:
             print(f"[WARN] No position defined for paper '{paper_id}', defaulting to (0,0)")
             pos = Position(x=0, y=0)
+        
+        # Track memberships
+        for iid in pd.insight_ids:
+            if iid in insight_to_papers:
+                insight_to_papers[iid].append(paper_id)
+
         nodes.append(
             NodeData(
                 id=paper_id,
@@ -387,5 +364,27 @@ def build_graph(vault_root: pathlib.Path) -> GraphResponse:
                 position=pos,
             )
         )
+
+    # Dynamically generate edges for each insight
+    # Sort papers by X-coordinate to create a clean progression
+    for ins in insight_list:
+        member_pids = insight_to_papers.get(ins.id, [])
+        if len(member_pids) < 2:
+            continue
+
+        # Sort by x coordinate
+        sorted_pids = sorted(
+            member_pids,
+            key=lambda pid: (_NODE_POSITIONS.get(pid).x if _NODE_POSITIONS.get(pid) else 0)
+        )
+
+        for i in range(len(sorted_pids) - 1):
+            ins.edges.append(
+                EdgeData(
+                    source=sorted_pids[i],
+                    target=sorted_pids[i+1],
+                    insight_id=ins.id
+                )
+            )
 
     return GraphResponse(nodes=nodes, insights=insight_list)

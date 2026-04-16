@@ -8,6 +8,9 @@
  */
 
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import DraggablePanel from "@/components/DraggablePanel";
 import { useConcept } from "@/hooks/useConcept";
 import type { InsightData } from "@/lib/types";
@@ -56,7 +59,7 @@ export default function ConceptPanel({ conceptId, activeInsight, onClose }: Conc
       >
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
           <span style={{ fontSize: "10px", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--text-label)", paddingTop: "2px" }}>
-            Core Concept · drag to move
+            Core Concept
           </span>
           <button
             onClick={(e) => { e.stopPropagation(); onClose(); }}
@@ -126,9 +129,6 @@ export default function ConceptPanel({ conceptId, activeInsight, onClose }: Conc
 
           {concept.related_paper_ids.length > 0 && (
             <div>
-              <p style={{ fontSize: "9px", letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--text-label)", marginBottom: "8px" }}>
-                Featured In
-              </p>
               <div style={{ display: "flex", flexDirection: "column", gap: "5px" }}>
                 {concept.related_paper_ids.map((id) => (
                   <span key={id} style={{
@@ -148,7 +148,12 @@ export default function ConceptPanel({ conceptId, activeInsight, onClose }: Conc
           <div style={{ height: "1px", background: `linear-gradient(to right, transparent, ${insightColor}30, transparent)` }} />
 
           <div className="md-body" style={{ fontSize: "13px" }}>
-            <ReactMarkdown>{stripWikilinks(concept.body_md)}</ReactMarkdown>
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm, remarkMath]}
+              rehypePlugins={[rehypeKatex]}
+            >
+              {stripWikilinks(concept.body_md)}
+            </ReactMarkdown>
           </div>
         </div>
       )}

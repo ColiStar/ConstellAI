@@ -13,14 +13,7 @@ These are the high-level commonalities that span across multiple papers, transce
 - [[✨ Relativity Over Absolutes]]
 - [[✨ The Variance of Trajectories]]
 - [[✨ Disentanglement and Anchoring]]
-- [[✨ Superficial vs Geometric Alignment]]
-
-## 🗣️ Potential Presentation Directions
-Topics that can easily be developed into final projects or seminar presentations:
-- [[🗣️ Report - The Paradox of AI Reasoning]]
-- [[🗣️ Report - The Illusion of Alignment and Geometric Defense]]
-- [[🗣️ Report - Mapping the Unknown (OOD and Calibration)]]
-- [[🗣️ Report - The Convergence of Modalities]]
+- [[✨ Superficial vs Intrinsic Latent Structure]]
 
 ## 🧠 Concept Nodes
 *(To be expanded. Add new concepts as they are encountered)*

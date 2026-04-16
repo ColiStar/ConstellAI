@@ -6,6 +6,8 @@ set -e
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "▲ Starting FastAPI backend on :8000 ..."
+# Point the backend directly to your Obsidian vault for real-time synchronization
+export VAULT_PATH="$ROOT/.."
 "$ROOT/.venv/bin/uvicorn" backend.main:app --reload --port 8000 &
 BACKEND_PID=$!
 
